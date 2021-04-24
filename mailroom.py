@@ -15,14 +15,19 @@ pull directly from a spreadsheet soon thus eliminating the variables donor_list,
 donor_list = ('Tony Stark',
               'Steven Rogers',
               'Bruce Wayne',
-              'Clark Kent ',
+              'Clark Kent',
               'Geoffrey Donnell')
 donor_amount = [6537854, 16396.10, 877.33, 708.42, 91250000]
 donor_freq = [2, 3, 1, 3, 365]
 
-# donor data, i used dd for short
 
-
+dd =[]
+#I am using a for loop to contain all of the donor data into a list called dd
+for step in range(0,len(donor_list)):
+    dd.append(donor_list[step])
+    dd.append(donor_amount[step])
+    dd.append(donor_freq[step])
+print(dd)
 
 '''
 dd = (donor_list[0], donor_amount[0], donor_freq[0],
@@ -33,7 +38,7 @@ dd = (donor_list[0], donor_amount[0], donor_freq[0],
       
     '''
 
-print(dd)
+#print(dd)
 
 def menu():
     # This function will be the one that runs everytime and will point to other functions to compelete
@@ -51,28 +56,39 @@ def menu():
         choice = (input('Please enter a valid choice: 1, 2, or 3: '))
 
     if choice == '1':
-        send_letter()
+        letter_options()
     if choice =='2':
         generate_report()
     if choice == '3':
         print("\n Thanks for using AMRS, Goodbye!")
     return
 
-def send_letter():
+def letter_options():
     count = 0
     while True:
-        choice = input("Please enter the full name of the donor (case sensitive) or type L for a list of donors: ")
-        if choice == 'L':
+        donor_name = input("Please enter the full name of the donor (case sensitive) or type L for a list of donors: ")
+        if donor_name == 'L':
             print(f'The list of donors are: {donor_list}')
-            send_letter()
-        if choice in donor_list:
+            letter_options()
+        if donor_name in donor_list:
             print('You have entered an existing donor')
-
+            donation_amount = int(input('How much is the additional donation? Please enter a value: '))
+            for index in range(0,len(donor_list)): #This for loop is used to find where in the list is the donor
+                if donor_list[index] == donor_name:
+                    pointer_index = index
+            #--------end of for loop for finding the pointer_index to use to append with
+            donor_amount[pointer_index] = donor_amount[pointer_index] + donation_amount
+            donor_freq[pointer_index] = donor_freq[pointer_index] + 1
+            # Here we should call an email function but for now I will print the email
+            print(f'Thank you for your {donor_freq[pointer_index]} donations for a total of '
+                  f'{donor_amount[pointer_index]}')
+            print()#multiple prints to give space before we prompt again
+            print()
+            menu()
         else:
-            donor_name = choice
             donation_amount = input(f'You have entered a new donor named {donor_name}, enter an amount in th'
                                     f'the form 0.00: ')
-            print(f'Thank for your donation {donor_name} of {donation_amount}')
+            print(f'Thank for your donation {donor_name} of ${donation_amount}')
 
             print()
             menu()
@@ -97,4 +113,4 @@ def generate_report():
 
 #send_letter()
 #generate_report()
-#menu()
+menu()
