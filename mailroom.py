@@ -17,28 +17,9 @@ donor_list = ('Tony Stark',
               'Bruce Wayne',
               'Clark Kent',
               'Geoffrey Donnell')
-donor_amount = [6537854, 16396.10, 877.33, 708.42, 91250000]
+donor_amount = [0, 0, 0, 0, 0]
 donor_freq = [2, 3, 1, 3, 365]
 
-
-dd =[]
-#I am using a for loop to contain all of the donor data into a list called dd
-for step in range(0,len(donor_list)):
-    dd.append(donor_list[step])
-    dd.append(donor_amount[step])
-    dd.append(donor_freq[step])
-print(dd)
-
-'''
-dd = (donor_list[0], donor_amount[0], donor_freq[0],
-      donor_list[1], donor_amount[1], donor_freq[1],
-      donor_list[2], donor_amount[2], donor_freq[2],
-      donor_list[3], donor_amount[3], donor_freq[3],
-      donor_list[4], donor_amount[4], donor_freq[4])
-      
-    '''
-
-#print(dd)
 
 def menu():
     # This function will be the one that runs everytime and will point to other functions to compelete
@@ -73,17 +54,14 @@ def letter_options():
         if donor_name in donor_list:
             print('You have entered an existing donor')
             donation_amount = int(input('How much is the additional donation? Please enter a value: '))
-            for index in range(0,len(donor_list)): #This for loop is used to find where in the list is the donor
+            # Start of loop to determine where in the list the donor is and their corresponding amount and freq
+            for index in range(0,len(donor_list)):
                 if donor_list[index] == donor_name:
                     pointer_index = index
-            #--------end of for loop for finding the pointer_index to use to append with
+            # Adding the additional donation to the data base
             donor_amount[pointer_index] = donor_amount[pointer_index] + donation_amount
             donor_freq[pointer_index] = donor_freq[pointer_index] + 1
-            # Here we should call an email function but for now I will print the email
-            print(f'Thank you for your {donor_freq[pointer_index]} donations for a total of '
-                  f'{donor_amount[pointer_index]}')
-            print()#multiple prints to give space before we prompt again
-            print()
+            draft_email(donor_name[pointer_index],donor_amount[pointer_index])
             menu()
         else:
             donation_amount = input(f'You have entered a new donor named {donor_name}, enter an amount in th'
@@ -94,6 +72,16 @@ def letter_options():
             menu()
         break
         pass
+
+def draft_email(donor_name, donor_amount):
+    print(f'\nEmail to: {donor_name.replace(" ","")}@gmail.com')
+    print('\n')
+    print('Subject:Donation Received')
+    print(f'\nThank you {donor_name} for your generous donation of {donor_amount}! \n'
+          f'We greatly appreciate your support to our cause. \n \n'
+          f'Best regards, \n'
+          f'Donation Society of Money \n')
+    pass
 
 def generate_report():
     #Formating and Printing for Header
@@ -106,11 +94,10 @@ def generate_report():
     donor_format = '{:18}|${:15.2f}|{:16}|${:19.2f}|'
 
     for step in range(0,5):
-        print(donor_format.format(dd[step*3], dd[step*3+1], dd[step*3+2], (dd[step*3+1] / dd[step*3+2])))
+        print(donor_format.format(donor_list[step], donor_amount[step],
+                                  donor_freq[step], (donor_amount[step] / donor_freq[step])))
     menu() #after report is generated we will go back to the menu
     pass
 
 
-#send_letter()
-#generate_report()
 menu()
